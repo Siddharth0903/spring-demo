@@ -106,7 +106,9 @@ public class UserServiceImpl implements UserService {
 		// here we need to check whether the roles match the given roles or not
 		updateUser.setRoles(user.getRoles());
 		
-		userRepository.save(updateUser);
+		userRepository.save(
+				
+				updateUser);
 		
 		UserDTO userDTO = this.userMapper.userToDTO(updateUser);
 		

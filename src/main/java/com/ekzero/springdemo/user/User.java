@@ -40,10 +40,7 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName="role_id"))
 	private List<Role> roles;
 	
-	@OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE,
-											CascadeType.PERSIST,
-											CascadeType.REFRESH,
-											CascadeType.DETACH})
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> address;
 	
 //	@ManyToOne
