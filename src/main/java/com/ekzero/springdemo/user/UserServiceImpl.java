@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<UserDTO> getUser(int userId) throws ResourceNotFoundException {
 		User user = userRepository.findById(userId).get();
 		UserDTO userDTO = this.userMapper.userToDTO(user);
+	
 		return ResponseEntity.ok(userDTO);
 	}
 	
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
 	public UserDTO addUser(User user) throws ResourceNotFoundException {
 		List<Role> roleList = roleRepository.findAll();
 		List<Role> userRoleList = user.getRoles();
-		List<Address> addressList;
+		List<Address> addressList = user.getAddress();
 		UserDTO userDTO = null;
 		
 		for(Role roles : roleList){
@@ -81,6 +82,11 @@ public class UserServiceImpl implements UserService {
 		}
 
 		user.setRoles(userRoleList);
+		
+		for(Address add : addressList) {
+			add.setUser(user);
+		}
+		
 		userRepository.save(user);
 		userDTO = this.userMapper.userToDTO(user);
 		return userDTO;
@@ -89,16 +95,18 @@ public class UserServiceImpl implements UserService {
 	
 	public ResponseEntity<UserDTO> updateUser( int userId, User user) throws ResourceNotFoundException{
 		User updateUser =  userRepository.findById(userId).get();
-				
 		
-		updateUser.setUserId(user.getUserId());
+		updateUser.setUserId(userId);
 		updateUser.setUserName(user.getUserName());
 		updateUser.setUserEmail(user.getUserEmail());
+		updateUser.setRoles(user.getRoles());
 		updateUser.setAddress(user.getAddress());
 		
 		
 		// here we need to check whether the roles match the given roles or not
 		updateUser.setRoles(user.getRoles());
+		
+		userRepository.save(updateUser);
 		
 		UserDTO userDTO = this.userMapper.userToDTO(updateUser);
 		
@@ -107,7 +115,7 @@ public class UserServiceImpl implements UserService {
 	
 	
 	public  Map<String, Boolean> deleteUser(int userId) throws ResourceNotFoundException{
-		User deleteUser = userRepository.getById(userId);
+		User deleteUser = userRepository.findById(userId).get();
 		userRepository.delete(deleteUser);
 		
 		Map<String, Boolean> response = new HashMap<>();
