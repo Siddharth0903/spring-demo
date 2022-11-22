@@ -22,7 +22,7 @@ public class Role implements Serializable{
 	@Id
 	private int roleId;
 
-	@Column(name = "role_name")
+	@Column(name = "role_name", nullable=false)
 	private String roleName;
 	
 	@ManyToMany

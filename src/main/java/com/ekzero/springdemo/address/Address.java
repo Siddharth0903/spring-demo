@@ -44,13 +44,15 @@ public class Address {
 	private User user;
 	
 
-	public Address(String streetNumber, String streetName, String city, String country, int pincode) {
+	public Address(String streetNumber, String streetName, String city, String country, int pincode,User user) {
 		super();
 		this.streetNumber = streetNumber;
 		this.streetName = streetName;
 		this.city = city;
 		this.country = country;
 		this.pincode = pincode;
+		this.user = user;
+		
 		
 	}
 	

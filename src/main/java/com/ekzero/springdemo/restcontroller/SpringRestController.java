@@ -1,8 +1,9 @@
 package com.ekzero.springdemo.restcontroller;
 
-import java.util.HashMap;
+import java.util.HashMap;  
 import java.util.List;
 import java.util.Map;
+import org.mapstruct.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +11,11 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import com.ekzero.springdemo.exception.ResourceNotFoundException;
+import com.ekzero.springdemo.mapper.RoleMapper;
 import com.ekzero.springdemo.role.Role;
+import com.ekzero.springdemo.role.RoleDTO;
 import com.ekzero.springdemo.role.RoleRepository;
+import com.ekzero.springdemo.role.RoleServiceImpl;
 import com.ekzero.springdemo.user.*;
 
 
@@ -24,25 +28,27 @@ public class SpringRestController {
 	private UserServiceImpl userServiceImpl;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private RoleServiceImpl roleServiceImpl;
 	
 	@GetMapping("/users")
-	public List<User> getUsers(){
+	public List<UserDTO> getUsers(){
 		return userServiceImpl.getUsers();
 	}
 	
 	@GetMapping("/users/{userId}")
-	public ResponseEntity<User> getUser(@PathVariable int userId) throws ResourceNotFoundException {
+	public ResponseEntity<UserDTO> getUser(@PathVariable int userId) throws ResourceNotFoundException {
 		return userServiceImpl.getUser(userId);
 	}
 	
 	@PostMapping("/users")
-	public User addUser(@Valid @RequestBody User user) {
+	public UserDTO addUser(@Valid @RequestBody User user) throws ResourceNotFoundException {
 		return userServiceImpl.addUser(user);
 		
 	}
 	
 	@PutMapping("/users/{userId}")
-	public ResponseEntity<User> updateUser(@PathVariable(value ="userId") int userId,
+	public ResponseEntity<UserDTO> updateUser(@PathVariable(value ="userId") int userId,
 			@Valid @RequestBody User user) throws ResourceNotFoundException{
 		return userServiceImpl.updateUser(userId, user);
 	}
@@ -53,13 +59,13 @@ public class SpringRestController {
 	}
 	
 	@PostMapping("/add")
-	public Role addRole(@Valid @RequestBody Role role){
-		return roleRepository.save(role);
+	public RoleDTO addRole(@Valid @RequestBody Role role){
+		 return roleServiceImpl.addRole(role);
 	}
 	
 	@GetMapping("/fetch")
-	public List<Role> getRoles(){
-		return roleRepository.findAll();
+	public List<RoleDTO> getRoles(){
+		return roleServiceImpl.getRoles();
 	}
 
 }

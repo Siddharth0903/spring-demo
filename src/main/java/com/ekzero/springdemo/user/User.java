@@ -17,15 +17,12 @@ import javax.persistence.*;
 
 @Getter
 @JsonIgnoreProperties
+@NoArgsConstructor
 @Setter
 @Entity
 @Table(name="users")
 public class User {
-	
-public User() {
-		
-	}
-		
+			
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
 	@Column(name = "user_id")
 	@Id
