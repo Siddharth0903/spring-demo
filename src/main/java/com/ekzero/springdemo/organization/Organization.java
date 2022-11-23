@@ -27,6 +27,7 @@ public class Organization implements Serializable {
 		super();
 		this.orgName = orgName;
 		this.location = location;
+	
 	}
 
 	@Column(name="org_name")

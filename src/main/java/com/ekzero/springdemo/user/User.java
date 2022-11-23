@@ -43,15 +43,16 @@ public class User {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> address;
 	
-//	@ManyToOne
-//	private Organization organization;
+	@ManyToOne
+	private Organization organization;
 
-	public User(String userName, String userEmail, List<Role> roles, List<Address> address) {
+	public User(String userName, String userEmail, List<Role> roles, List<Address> address,Organization organization) {
 		super();
 		this.userName = userName;
 		this.userEmail = userEmail;
 		this.roles = roles;
 		this.address = address;
+		this.organization=organization;
 		
 	}
 	

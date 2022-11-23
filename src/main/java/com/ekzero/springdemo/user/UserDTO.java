@@ -5,6 +5,7 @@ import lombok.Data;
 
 import com.ekzero.springdemo.address.Address;
 import com.ekzero.springdemo.address.AddressDTO;
+import com.ekzero.springdemo.organization.OrganizationDTO;
 import com.ekzero.springdemo.role.Role;
 import com.ekzero.springdemo.role.RoleDTO;
 
@@ -20,5 +21,7 @@ public class UserDTO {
 	private List<RoleDTO> roles;
 	
 	private List<AddressDTO> address;
+	
+	private OrganizationDTO organization;
 
 }

@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	
 	@Autowired
 	private final UserMapper userMapper;
 
@@ -62,36 +63,53 @@ public class UserServiceImpl implements UserService {
 	
 	
 	public UserDTO addUser(User user) throws ResourceNotFoundException {
-		List<Role> roleList = roleRepository.findAll();
-		List<Role> userRoleList = user.getRoles();
-		List<Address> addressList = user.getAddress();
+		
 		UserDTO userDTO = null;
+		user.setRoles(verifyRoles(user));
+		addressClassSetUser(user);
 		
-		for(Role roles : roleList){
-			for(Role userRoles : userRoleList) {
-				
-				if(userRoles.getRoleId() == roles.getRoleId() &&
-		            userRoles.getRoleName() == roles.getRoleName())	{
-					
-					userRoleList.add(userRoles);
-				}
-					
-				
-			}
-			
-		}
-
-		user.setRoles(userRoleList);
-		
-		for(Address add : addressList) {
-			add.setUser(user);
-		}
 		
 		userRepository.save(user);
 		userDTO = this.userMapper.userToDTO(user);
 		return userDTO;
 	}
 	
+
+	
+	public void addressClassSetUser(User user) {
+		List<Address> addressList = user.getAddress();
+		for(Address add : addressList) {
+			add.setUser(user);
+		}
+	}
+	
+	public List<Role> verifyRoles(User user) throws ResourceNotFoundException{
+		List<Role> roleList = roleRepository.findAll();
+		List<Role> userRoleList = user.getRoles();
+		List<Role> usersUpdatedRoleList = new ArrayList<Role>();
+				
+		for(Role roles : roleList){
+			for(Role userRoles : userRoleList) {
+				
+				if(userRoles.getRoleId() == roles.getRoleId() &&
+		            userRoles.getRoleName().equals(roles.getRoleName()))	{
+					
+					usersUpdatedRoleList.add(userRoles);
+				}
+					
+				
+			}
+			
+		}
+		
+		if(usersUpdatedRoleList == null) {
+			throw new ResourceNotFoundException("Cannot find any roles");
+		}
+
+		return usersUpdatedRoleList;
+		
+		
+	}
 	
 	public ResponseEntity<UserDTO> updateUser( int userId, User user) throws ResourceNotFoundException{
 		User updateUser =  userRepository.findById(userId).get();
@@ -99,16 +117,10 @@ public class UserServiceImpl implements UserService {
 		updateUser.setUserId(userId);
 		updateUser.setUserName(user.getUserName());
 		updateUser.setUserEmail(user.getUserEmail());
-		updateUser.setRoles(user.getRoles());
+		updateUser.setRoles(verifyRoles(user));
 		updateUser.setAddress(user.getAddress());
 		
-		
-		// here we need to check whether the roles match the given roles or not
-		updateUser.setRoles(user.getRoles());
-		
-		userRepository.save(
-				
-				updateUser);
+		userRepository.save(updateUser);
 		
 		UserDTO userDTO = this.userMapper.userToDTO(updateUser);
 		

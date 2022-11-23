@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.ekzero.springdemo.address.Address;
 import com.ekzero.springdemo.address.AddressDTO;
 import com.ekzero.springdemo.mapper.UserMapper;
+import com.ekzero.springdemo.organization.Organization;
+import com.ekzero.springdemo.organization.OrganizationDTO;
 import com.ekzero.springdemo.role.Role;
 import com.ekzero.springdemo.role.RoleDTO;
 import com.ekzero.springdemo.user.User;
@@ -30,6 +32,7 @@ public class UserMapperImpl implements UserMapper {
 		userDTO.setUserEmail(user.getUserEmail());
 		userDTO.setRoles(roleListToDTO(user.getRoles()));
 		userDTO.setAddress(addressListToDTO(user.getAddress()));
+		userDTO.setOrganization(orgToOrgDTO(user.getOrganization()));
 		
 		return userDTO;
 	}
@@ -46,6 +49,18 @@ public class UserMapperImpl implements UserMapper {
 		return userDTOList;
 	}
 	
+	public OrganizationDTO orgToOrgDTO(Organization organization) {
+		if(organization == null ) return null;
+		
+		OrganizationDTO orgDTO = new OrganizationDTO();
+		
+		orgDTO.setOrgId(organization.getOrgId());
+		orgDTO.setOrgName(organization.getOrgName());
+		orgDTO.setOrgLocation(organization.getLocation());
+		
+		return orgDTO;
+		
+	}
 	public RoleDTO roleToDTO (Role role) {
 		if (role == null) return null;
 		

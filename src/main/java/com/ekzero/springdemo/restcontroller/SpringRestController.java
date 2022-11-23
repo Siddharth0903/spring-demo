@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ekzero.springdemo.exception.ResourceNotFoundException;
 import com.ekzero.springdemo.mapper.RoleMapper;
+import com.ekzero.springdemo.organization.Organization;
+import com.ekzero.springdemo.organization.OrganizationDTO;
+import com.ekzero.springdemo.organization.OrganizationServiceImpl;
 import com.ekzero.springdemo.role.Role;
 import com.ekzero.springdemo.role.RoleDTO;
 import com.ekzero.springdemo.role.RoleRepository;
@@ -30,6 +33,8 @@ public class SpringRestController {
 	private RoleRepository roleRepository;
 	@Autowired
 	private RoleServiceImpl roleServiceImpl;
+	@Autowired
+	private OrganizationServiceImpl orgService;
 	
 	@GetMapping("/users")
 	public List<UserDTO> getUsers(){
@@ -42,7 +47,7 @@ public class SpringRestController {
 	}
 	
 	@PostMapping("/users")
-	public UserDTO addUser(@Valid @RequestBody User user) throws ResourceNotFoundException {
+	public UserDTO addUser(@Valid @RequestBody User user) throws ResourceNotFoundException  {
 		return userServiceImpl.addUser(user);
 		
 	}
@@ -58,14 +63,24 @@ public class SpringRestController {
 		return userServiceImpl.deleteUser(userId);
 	}
 	
-	@PostMapping("/add")
+	@PostMapping("/roles/add")
 	public RoleDTO addRole(@Valid @RequestBody Role role){
 		 return roleServiceImpl.addRole(role);
 	}
 	
-	@GetMapping("/fetch")
+	@GetMapping("/roles/list")
 	public List<RoleDTO> getRoles(){
 		return roleServiceImpl.getRoles();
+	}
+	
+	@PostMapping("/org/add")
+	public OrganizationDTO addOrg(@Valid @RequestBody Organization organization) {
+		return orgService.addOrg(organization);
+	}
+	
+	@GetMapping("/org/list")
+	public List<OrganizationDTO> getAllOrgs(){
+		return orgService.getAllOrgs();
 	}
 
 }
